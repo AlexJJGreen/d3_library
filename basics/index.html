@@ -1,0 +1,126 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>
+        Let's do a high-level overview of D3.js.
+    </p>
+    <h3>Binding Data to the DOM</h3>
+    <p>
+        Basically, D3 allows for data to be <i>bound</i> to DOM elements and
+        then manipulated.
+    </p>
+    <h3>Enter, Update, Exit Pattern</h3>
+    <p>
+        How this foundational concept works is a three-part pattern:
+        <strong>Enter, Update, Exit</strong>
+    <ul>
+        <li><strong>Enter:</strong> Is the process of adding new nodes for data items that currently do not have one.
+        </li>
+        <li><strong>Update:</strong> Is the modification of existing nodes.</li>
+        <li><strong>Exit:</strong> Is the remvoval of nodes.</li>
+    </ul>
+    </p>
+    <h3>Scales</h3>
+    <p>
+        Scales are functions that map a <strong>domain</strong> to a <strong>range</strong>.
+    </p>
+    <h3>Axes</h3>
+    <p>
+        The visual representation of scales.
+    </p>
+    <h3>SVG Manipulation</h3>
+    <p>
+        D3 normally uses SVGs to render charts.
+    </p>
+    <h3>Transitions and Animations</h3>
+    <p>
+        D3 allows for dynamic behaviour in charts and visualisations.
+    </p>
+    <h3>Interactions</h3>
+    <p>
+        With this dynamic behaviour comes the ability for user interaction with the visualisation.
+    </p>
+    <h3>
+        Layouts
+    </h3>
+    <p>
+        Data can be visualised using pre-built algorithms to display certain charts.
+    </p>
+    <h3>
+        Geo Features
+    </h3>
+    <p>
+        Similarly, the D3 library comes with support for rendering geographic information such as maps.
+    </p>
+    <h3>
+        Data Loading and Formatting
+    </h3>
+    <p>
+        The data inputs for these charts can come from a variety of sources supported by the library.
+    </p>
+    <p>
+        <strong>Source:</strong> <i>'Measuring Economic Policy Uncertainty'</i> by Scott Baker, Nicholas Bloom and
+        Steven J. Davis at
+        <link href="https://www.PolicyUncertainty.com">PolicyUncertainty</link>
+    </p>
+    <br>
+    <br>
+    <h2>Scales and Axes</h2>
+    <p>
+        As the core concepts and components of D3, Scales and Axes require a fundamental understanding.
+    </p>
+    <h3>
+        Scales
+    </h3>
+    <p>Scales are functions that take an input (from the domain) and produce an output (in the range). The common
+        misconception is that the domain and range represent the X and Y axis, this is <strong>NOT</strong> correct! The
+        domain represents the potential values of your data, the range represents how those will be displayed as pixels
+        on the screen.
+        <br><br>
+        <strong>Domain</strong>
+    <p>
+        The domain is the set of possible values for your scale. For example, the domain of a linear scale in a test
+        graded from 100 would be [0,100].
+        <br><br>
+        In an ordinal scale of fruits, the domain may be [apple, banana, melon].
+    </p>
+    <br>
+    <strong>Range</strong>
+    <p>
+        The range then is the possible set of outputs produced by a scale.
+    </p>
+    <p>
+        We can think of this like any mathematical forumala and graph. Essentially the domain is the potential inputs
+        (<i>x</i>), the scale is the formula or function for that input value (<i>f(x)</i>) and the range is the
+        potential output values of that (<i>y</i>).
+        <br><br>
+        What this means is simply, when given a value from the defined domain, D3 converts it to the given range.
+    </p>
+    <br><br>
+    <h2>Building a Dynamic Axis</h2>
+    <p>
+        So while it may be easier to start with a simple static axis, the reality is almost all webapps need to be
+        dynamic these days so may as well start with responsive values. Here is the process.
+    </p>
+    <h3>Select the SVG and determine its width</h3>
+    <p></p>
+    <h3>Set up the Linear Scale</h3>
+    <p></p>
+    <h3>Generate the X-Axis</h3>
+    <p></p>
+    <h3>Render the X-Axis on the SVG</h3>
+    </p>
+    <div id="svg">
+
+    </div>
+    <script type="module" src="styles.js"></script>
+</body>
+
+</html>
