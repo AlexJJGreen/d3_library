@@ -1,12 +1,11 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
 
-let debounce = (func, wait) => {
+const debounce = (cbFunc, params, wait) => {
     let timeout;
     return () => {
-        const context = this, args = arguments;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            func.apply(context, args);
+            cbFunc(params);
         }, wait);
     };
 }
@@ -49,9 +48,16 @@ let d3Graph = (svgEl) => {
         .call(xAxis);
 };
 
+const errorCatch = () => {
+    try {
+        d3Graph("#svg");
+    } catch (e) {
+        console.error("Error", e);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", (e) => {
     // render SVG on dom load, resize on resize with debounce
     d3Graph("#svg");
-    document.addEventListener("resize", debounce(d3Graph("#svg"), 200));
+    window.addEventListener("resize", debounce(d3Graph, "#svg", 250));
 });
-
