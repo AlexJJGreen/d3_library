@@ -3,8 +3,9 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
 document.addEventListener("DOMContentLoaded", (e) => {
 
     // Select SVG Element, calulate width + coerces value 100px - slice to number
-    const svg = d3.select("svg");
-    let svgWidth = svg.style.width;
+    let svg = d3.select("#svg");
+    let svgWidth = svg.node().getBoundingClientRect().width;
+
 
     console.log(svgWidth);
 
