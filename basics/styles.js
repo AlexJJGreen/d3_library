@@ -1,11 +1,12 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
 
-const debounce = (cbFunc, params, wait) => {
+// call func only once after multiple resize triggers
+const debounce = (cbFunc, wait) => {
     let timeout;
-    return () => {
+    return (...args) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            cbFunc(params);
+            cbFunc(...args);
         }, wait);
     };
 }
@@ -48,16 +49,13 @@ let d3Graph = (svgEl) => {
         .call(xAxis);
 };
 
-const errorCatch = () => {
-    try {
-        d3Graph("#svg");
-    } catch (e) {
-        console.error("Error", e);
-    }
-}
-
 document.addEventListener("DOMContentLoaded", (e) => {
     // render SVG on dom load, resize on resize with debounce
     d3Graph("#svg");
-    window.addEventListener("resize", debounce(d3Graph, "#svg", 250));
+    window.addEventListener("resize", debounce((e) => {
+        // remove current render
+        d3.select("#svg").selectAll("*").remove();
+        // rerender
+        d3Graph("#svg");
+    }, 200));
 });
