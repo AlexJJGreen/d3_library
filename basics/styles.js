@@ -6,13 +6,28 @@ document.addEventListener("DOMContentLoaded", (e) => {
     let svg = d3.select("#svg");
     let svgWidth = svg.node().getBoundingClientRect().width;
 
+    // define margins
+    let margins = {
+        top: 15,
+        right: 15,
+        bottom: 25,
+        left: 30
+    }
 
-    console.log(svgWidth);
+    // define aspect ratio
+    let aspectRatio = 16 / 9;
+
+    // set element height as aspect ratio
+    svg.attr("height", svgWidth / aspectRatio);
+
+    // define chart dimensions
+    let chartWidth = svgWidth - margins.left - margins.right;
+    let chartHeight = (svgWidth / aspectRatio) - margins.top - margins.bottom;
 
     // Set up the linear scale
     let xScale = d3.scaleLinear()
         .domain([0, 100])
-        .range([0, svgWidth]);
+        .range([0, chartWidth]);
 
 
     // Generate the X axis
@@ -20,7 +35,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
     // add the x-axis to the svg
     svg.append("g")
-        .attr("transform", "translate(0,30)")
+        .attr("transform", `translate(${margins.left},${chartHeight + margins.top})`)
         .call(xAxis);
 
 });
