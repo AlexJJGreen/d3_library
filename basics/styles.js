@@ -44,12 +44,26 @@ let d3Graph = (svgEl, data) => {
     console.log(Math.ceil(maxIndex / 100) * 100);
 
     let yScale = d3.scaleLinear()
-        .domain([Math.ceil((maxIndex / 100) * 100), 0])
+        .domain([(Math.ceil((maxIndex / 100)) * 100), 0])
         .range([0, chartHeight]);
 
     // Generate the X axis
     let xAxis = d3.axisBottom(xScale);
     let yAxis = d3.axisLeft(yScale);
+
+    // generate data nodes
+    const line = d3.line()
+        .x(d => xScale(d.Date))
+        .y(d => yScale(d.Index));
+
+    // addend to svg
+    svg.append("path")
+        .datum(data)  // Binds your data to the line
+        .attr("fill", "none")  // Typically, you don't want to fill under a line chart
+        .attr("stroke", "steelblue")  // The color of the line
+        .attr("stroke-width", 1)  // The width of the line
+        .attr("transform", `translate(${margins.right},${margins.top})`)
+        .attr("d", line);  // Generates the d attribute using your line generator
 
     // add the x-axis to the svg
     svg.append("g")
@@ -59,6 +73,7 @@ let d3Graph = (svgEl, data) => {
     svg.append("g")
         .attr("transform", `translate(${margins.right},${margins.top})`)
         .call(yAxis);
+
 };
 
 const fetchGraphData = (dataPath) => {
