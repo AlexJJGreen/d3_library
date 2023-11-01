@@ -23,12 +23,14 @@ class timeSeriesLinear {
         //  Tooltip
         this.tooltip = null;
 
+        this.container.on("mousemove", (event) => this.mousemove(event));
+
         // resize
         window.addEventListener("resize", this.debounce((e) => {
-            console.log("TRRRRRIGWDJKBSK");
             this.container.selectAll("*").remove();
             this.initSVG();
             this.renderSVG();
+            this.renderTooltip();
         }, 200));
     }
 
@@ -75,6 +77,15 @@ class timeSeriesLinear {
         this.xAxis = d3.axisBottom(this.xScale);
         this.yAxis = d3.axisLeft(this.yScale);
 
+        /*
+        this.yAxisLabel = this.yAxis
+            .append("text")
+            .attr("class", "y-axis-label")
+            .attr("x", -dimensions.boundedHeight / 2)
+            .attr("y", -dimensions.margin.left + 110)
+            .html("Internet Usage (GB)");
+            */
+
         // Generate Data Nodes
         this.line = d3.line()
             .x(d => this.xScale(d.Date))
@@ -87,18 +98,18 @@ class timeSeriesLinear {
             .datum(this.data)  // Binds your data to the line
             .attr("fill", "none")  // Typically, you don't want to fill under a line chart
             .attr("stroke", "steelblue")
-            .attr("stroke-width", 2)
+            .attr("stroke-width", 3)
             .attr("transform", `translate(${this.margins.right},${this.margins.top})`)
             .attr("d", this.line);  // Generates the d attribute using your line generator
 
         // add the x-axis to the svg
         this.container.append("g")
-            .attr("stroke-width", 2)
+            .attr("stroke-width", 3)
             .attr("transform", `translate(${this.margins.left},${this.chartHeight + this.margins.top})`)
             .call(this.xAxis);
         // add y axis
         this.container.append("g")
-            .attr("stroke-width", 2)
+            .attr("stroke-width", 3)
             .attr("transform", `translate(${this.margins.right},${this.margins.top})`)
             .call(this.yAxis);
     }
@@ -114,35 +125,40 @@ class timeSeriesLinear {
             .attr("fill", "white")
             .style("opacity", 0.8);
         // style and position text
-        this.tooltipDate = tooltip.append("text")
+        this.tooltipDate = this.tooltip.append("text")
             .attr("x", 5)
             .attr("y", 20)
             .style("font-size", "10px");
 
-        this.tooltipValue = tooltip.append("text")
+        this.tooltipValue = this.tooltip.append("text")
             .attr("x", 5)
             .attr("y", 40)
             .style("font-size", "10px");
     }
 
     mousemove = (event) => {
-        console.log("tool tip triggered");
-        const [x, y] = d3.pointer(event, this.container.node());
-        const xDate = this.xScale.invert(x);  // Convert mouse x-coordinate to date
-        const i = d3.bisector(d => d.date).left(this.data, xDate);  // Find index of closest date
-        const d = this.data[i];
+        [this.x, this.y] = d3.pointer(event, this.container.node());
+        this.xDate = this.xScale.invert(this.x);  // Convert mouse x-coordinate to date
+        this.i = d3.bisector(datum => datum.date).left(this.data, this.xDate);  // Find index of closest date
+        this.d = this.data[this.i];
 
-        this.tooltipDate.text(`Date: ${d.Date}`);
-        this.tooltipValue.text(`Value: ${d.Index}`);
+        this.tooltipDate.text(`Date: ${this.d.Date}`);
+        this.tooltipValue.text(`Value: ${this.d.Index}`);
 
         // Position the tooltip with a slight offset (for better visibility)
-        tooltip.attr("transform", `translate(${x + 10}, ${y - 25})`);
+        this.tooltip.attr("transform", `translate(${this.x + 10}, ${this.y - 25})`);
 
-        this.container.append("path")
-            .datum(this.data)
-            .on("mouseover", () => this.tooltip.style("display", null))
+        this.container.append("rect")
+            .attr("width", this.svgWidth)
+            .attr("height", this.svgHeight)
+            .style("fill", "none")
+            .style("pointer-events", "all")
+            .on("mouseover", () => {
+                console.log("mouseover");
+                this.tooltip.style("display", null);
+            })
             .on("mouseout", () => this.tooltip.style("display", "none"))
-            .on("mousemove", mousemove);
+            .on("mousemove", this.mousemove);
     }
 
 }
@@ -154,6 +170,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
             let graph = new timeSeriesLinear("#svg", data);
             graph.initSVG();
             graph.renderSVG();
+            graph.renderTooltip();
         })
         .catch(error => { console.error("Error fetching data", error) });
 
